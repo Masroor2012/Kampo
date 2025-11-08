@@ -1,0 +1,169 @@
+id=""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/start.css">
+    <link rel="stylesheet" href="css/generate-load.css">
+    <link rel="shortcut icon" href="img/frame.png" type="image/x-icon">
+    <title>Workspace</title>
+</head>
+<body>
+<section id="load-anim">
+   
+        <img src="img/Kampo.png" class="loadIcon">
+    
+</section>
+
+    <main>
+        <div id="overall-workspace-display">
+            <div class="header top-tool-display" id="disp">
+                <div class="hamburger" id="hamburger">
+                    ☰
+                </div>
+                <h1 class="h1-primary-1">
+                    
+                        Workspace
+                </h1>
+                <a href="index.html">
+                    <div class="logo">
+                        <img src="img/Kampo.png" width="50px">
+                        <h1 class="Kampo-heading">ampo</h1>
+                    </div>
+                </a>
+                <button id="menu-cont" onclick="document.getElementById('menu-pop').style.display='flex'">
+                    Menu
+                <div class="block">
+                    <div class="bar1 bar-gen"></div>
+                    <div class="bar2 bar-gen"></div>
+                    <div class="bar3 bar-gen"></div>
+                </div>
+                </button>
+                <div class="menu-display-container" id="menu-pop">
+                    <button class="cancel-btn" onclick="document.getElementById('menu-pop').style.display='none'">
+                            Cancel
+                    </button>
+                    <div class="user-cont">
+                        <div class="user-avatar">
+                            <img src="img/avatar.png" class="avatar">
+                        </div>
+                        <span id="username-full" class="muted">
+                            <!-- User Name --muted -->
+                        </span>
+                    </div>
+                    <hr>
+                    <a href="index.html" class="menu-link">
+                        <img src="img/logout (1).png" width="50px" class="menu-icon gen-icon">
+                        Log Out
+                    </a>
+                    
+                    <a href="settings.html" class="menu-link">
+                        <img src="img/settings.png" width="50px" class="menu-icon gen-icon">
+                        Settings
+                    </a>
+                    
+                    <a href="ai.html" class="menu-link">
+                        <img src="img/artificial-intelligence.png" width="50px" class="menu-icon gen-icon">
+                        AI
+                    </a>
+                    <!-- <h3 style="font-size: 30px; font-family: sans-serif; text-align: center; cursor: default;">More</h3>
+                    <hr> -->
+                    <a href="fomcal.html" class="menu-link">
+                        <img src="img/calculator.png" width="50px" class="menu-icon gen-icon">
+                        Fomular Calculator
+                    </a>
+                    
+                    <a href="Quizgame.html" class="menu-link">
+                        <img src="img/ideas.png" width="50px" class="menu-icon gen-icon">
+                        Quiz Game
+                    </a>
+                    
+                    <a href="Sschool.html" class="menu-link">
+                        <img src="img/searchicon.png" width="50px" class="menu-icon gen-icon">
+                        Search a School 
+                    </a>
+                    
+                    <a href="about.html" class="menu-link">
+                        <img src="img/info.png" width="50px">
+                        Info
+                    </a>
+                </div>
+            </div>
+            <div class="primary-flex">
+                <div class="side-bar left-tool-display" id="sideBar">
+                    <div class="regular-tool-cont">
+                        <div class="side-bar-tool" id="home-tool" onclick="homeFunc()">
+                            <div class="scale-anim-div">
+                                <img src="img/home.png" width="30px">
+                                <div class="side-bar-tool-text">
+                                    Home
+                                </div>
+                            </div>
+                        </div>
+                                
+                                <div class="side-bar-tool" id="markTool" onclick="markFunc()">
+                                <div class="scale-anim-div">
+                                    <img src="img/doneicon.png" width="30px">
+                                    <div class="side-bar-tool-text">
+                                        Exam marker
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="side-bar-tool" id="lessonTool" onclick="lessonFunc()">
+                                <div class="scale-anim-div">
+                                    <img src="img/frame.png" width="30px">
+                                    <div class="side-bar-tool-text">
+                                        Lesson note generator
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        
+                    </div>
+                </div>
+             
+                <div class="main-cont" id="primary-toogle-display">
+                     <div class="home-page" id="home-page-dis">
+                        <div class="home-logo">
+                            <img src="img/rocket.png" width="400px" class="home-logo-img-icon-res">
+                        </div> 
+                        <div class="home-heading-cont">
+                            <h1 class="home-heading-cont-text">
+                                Hello <span id="username"></span>,<br>
+                                Welcome to your workspace! 
+                            </h1>
+                            <h3 class="guide-head-txt"><u>Guide-lines</u></h3>
+                            <ul>
+                                <li>Set your marking guide</li>
+                                <li>Input scores and informations</li>
+                                <li>Start Generating</li>
+                            </ul>
+                            <a href="app.html">
+                            <button class="start-btn">
+                                Start now!
+                            </button>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="lesson-page" id="lesson-page-dis">
+                        <div style="display:block;" class="wrap">
+                        <p class="notes">
+                            This feature allows you to generate lesson notes based on the Nigerian curriculum by just providing the class, subjects, topic, sub-topics including homeworks and class assessments. Click the start now button to start exploring!
+                        </p>
+                            <a href="Lesson-app.html">
+                            <button class="start-btn">
+                                Start now!
+                            </button>
+                            </a>
+                        </div>
+                    </div>
+                 </div>
+                    
+                </div>
+
+        </div>
+        
+    </main>
+    <script src="js/start.js"></script>
+</body>
+</html>

@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Nigerian Curriculum Lesson Note Generator — Final</title>
+<!-- html2pdf for client-side PDF export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<style>
+  :root{
+    --bg:#f6f8fb; --card:#fff; --muted:#6b7280; --text:#0f172a;
+    --accent:#2563eb; --accent-2:#3b82f6; --soft:#f3f8ff; --radius:12px; --shadow:0 8px 24px rgba(15,23,42,0.06);
+  }
+  [data-theme="dark"]{
+    --bg:#0b1220; --card:#0f1724; --muted:#9aa6b2; --text:#e6eef8;
+    --accent:#4f9efb; --accent-2:#6aa8ff; --soft:rgba(255,255,255,0.02); --shadow:0 10px 30px rgba(0,0,0,0.5);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;padding:18px}
+  .container{max-width:1200px;margin:0 auto}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+  h1{margin:0;font-size:18px}
+  .muted{color:var(--muted);font-size:13px}
+  .layout{display:grid;grid-template-columns:380px 1fr;gap:18px}
+  .card{background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow)}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  input,select,textarea,button{font:inherit}
+  input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(15,23,42,0.06);background:transparent;color:var(--text)}
+  textarea{min-height:300px;resize:vertical}
+  .row{display:flex;gap:8px}
+  .btn{background:var(--accent);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
+  .btn.ghost{background:transparent;border:1px solid rgba(37,99,235,0.12);color:var(--accent)}
+  .btn.small{padding:6px 8px;font-size:13px}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .warning{background:#fff7f0;border:1px solid #ffd6bf;padding:10px;border-radius:8px;color:#7a3b00;margin-bottom:10px;font-size:13px}
+  .footnote{font-size:12px;color:var(--muted);margin-top:8px}
+  .spinner{width:22px;height:22px;border-radius:50%;border:3px solid rgba(0,0,0,0.08);border-top-color:var(--accent);animation:spin 1s linear infinite;display:inline-block;vertical-align:middle;margin-right:8px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .preview-panel{height:380px;overflow:auto;padding:12px;border-radius:8px;border:1px solid rgba(15,23,42,0.04);background:linear-gradient(180deg,var(--card),var(--soft))}
+  .print-btn{background:#0f172a;color:#fff;padding:8px 10px;border-radius:8px;border:none;cursor:pointer}
+  @media (max-width:980px){ .layout{grid-template-columns:1fr} .card{padding:12px} .preview-panel{height:300px} }
+</style>
+</head>
+<body data-theme="light">
+<div class="container">
+  <div class="topbar">
+    <div>
+      <h1>Nigerian Curriculum Lesson Note Generator — Final</h1>
+      <div class="muted">Paste your OpenAI API key, fill fields, choose style, then click Generate.</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button id="themeToggle" class="btn small">🌙 Dark</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- Controls -->
+    <div class="card">
+      <div class="warning">
+        <strong>Security:</strong> Pasting your OpenAI API key in this page stores it locally (optional). For production, use a server-side proxy.
+      </div>
+
+      <label>OpenAI API Key</label>
+      <input id="apiKey" placeholder="sk-..." autocomplete="off"/>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+        <label style="flex:1"><input id="rememberKey" type="checkbox"/> Remember key in this browser</label>
+        <button id="removeKey" class="btn ghost small">Remove saved key</button>
+      </div>
+
+      <hr style="margin:12px 0;border:none;border-top:1px solid rgba(0,0,0,0.04)"/>
+
+      <label>Subject</label>
+      <select id="subject">
+        <!-- condensed but comprehensive list -->
+        <optgroup label="Primary & Common">
+          <option>English Language</option><option>Mathematics</option><option>Basic Science</option><option>Social Studies</option><option>Primary Technology</option><option>Christian Religious Knowledge</option><option>Islamic Religious Studies</option><option>Physical and Health Education</option><option>Creative Arts</option><option>Home Economics</option>
+        </optgroup>
+        <optgroup label="Junior Secondary (JSS)">
+          <option>Basic Science</option><option>Basic Technology</option><option>Mathematics</option><option>English Language</option><option>Computer Studies</option><option>Social Studies</option><option>Home Economics</option><option>French</option><option>Business Studies</option>
+        </optgroup>
+        <optgroup label="Senior Secondary (SS)">
+          <option>Mathematics</option><option>English Language</option><option>Biology</option><option>Chemistry</option><option>Physics</option><option>Further Mathematics</option><option>Economics</option><option>Government</option><option>Geography</option><option>Civic Education</option><option>Accounting</option><option>Commerce</option><option>Computer Science</option><option>Literature-in-English</option><option>Agricultural Science</option><option>Home Economics</option>
+        </optgroup>
+        <optgroup label="Other / Electives">
+          <option>Music</option><option>Fine Art</option><option>Auto Mechanics</option><option>Woodwork</option><option>Metalwork</option><option>Entrepreneurship</option><option>Health Science</option><option>Religious Studies</option><option>Others</option>
+        </optgroup>
+      </select>
+
+      <div class="row" style="margin-top:10px">
+        <div style="flex:1">
+          <label>Class / Level</label>
+          <select id="classLevel">
+            <optgroup label="Primary"><option>Primary 1</option><option>Primary 2</option><option>Primary 3</option><option>Primary 4</option><option>Primary 5</option><option>Primary 6</option></optgroup>
+            <optgroup label="Junior Secondary"><option>JSS1</option><option>JSS2</option><option>JSS3</option></optgroup>
+            <optgroup label="Senior Secondary"><option>SS1</option><option>SS2</option><option>SS3</option></optgroup>
+          </select>
+        </div>
+        <div style="width:140px">
+          <label>Term</label>
+          <select id="term"><option>First Term</option><option>Second Term</option><option>Third Term</option></select>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:10px">
+        <div style="flex:1">
+          <label>Week</label>
+          <input id="week" placeholder="e.g. Week 4"/>
+        </div>
+        <div style="width:160px">
+          <label>Lesson Style</label>
+          <select id="lessonStyle"><option value="Formal">Formal & Detailed</option><option value="Concise">Simplified & Concise</option></select>
+        </div>
+      </div>
+
+      <label style="margin-top:10px">Topic</label>
+      <input id="topic" placeholder="e.g. Photosynthesis" />
+
+      <label style="margin-top:10px">Subtopics (comma separated)</label>
+      <input id="subtopics" placeholder="Definition, Process, Factors, Examples" />
+
+      <div style="margin-top:10px" class="muted">Generation options</div>
+      <label style="margin-top:6px"><input id="optObjectives" type="checkbox" checked/> Include Objectives</label>
+      <label><input id="optMaterials" type="checkbox" checked/> Include Instructional Materials</label>
+      <label><input id="optAssessment" type="checkbox" checked/> Include Evaluation/Assessment</label>
+      <label><input id="optSummary" type="checkbox" checked/> Include Teacher's Note / Summary</label>
+
+      <div class="actions" style="margin-top:12px">
+        <button id="generateBtn" class="btn">Generate (AI)</button>
+        <button id="clearBtn" class="btn ghost">Clear</button>
+      </div>
+
+      <div id="status" class="muted" style="margin-top:10px"></div>
+
+      <hr style="margin:12px 0;border:none;border-top:1px solid rgba(0,0,0,0.04)"/>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button id="downloadPdf" class="btn">Download PDF</button>
+        <button id="printView" class="btn ghost">Printable / Full-page View</button>
+        <button id="saveLocal" class="btn ghost">Save Locally</button>
+        <button id="loadLocal" class="btn ghost">Load Last Save</button>
+        <button id="exportJson" class="btn ghost">Export JSON</button>
+        <input id="importJsonFile" type="file" accept="application/json" style="display:none"/>
+        <button id="importJson" class="btn ghost">Import JSON</button>
+        <button id="clearLocal" class="btn ghost">Clear Saved Notes</button>
+      </div>
+
+      <div class="footnote">If you see CORS errors when generating, use a simple serverless proxy (Cloudflare Worker or Vercel) and point the page to it. I can provide that helper if you want.</div>
+    </div>
+
+    <!-- Output / Editor -->
+    <div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <label class="muted">Generated Lesson Note (editable)</label>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div id="loading" style="display:none" class="muted"><span class="spinner"></span><span id="loadingText">Generating Lesson Note...</span></div>
+            <button id="renderPreview" class="btn ghost small">Render Preview</button>
+          </div>
+        </div>
+        <textarea id="noteArea" placeholder="AI generated note will appear here..."></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+          <button id="insertTeacherComment" class="btn ghost small">Auto Insert Teacher's Comment</button>
+          <button id="insertPrincipalComment" class="btn ghost small">Auto Insert Principal's Comment</button>
+        </div>
+      </div>
+
+      <div id="previewCard" class="card" style="margin-top:12px;display:block">
+        <h2 id="previewTitle">Lesson Note Preview</h2>
+        <div id="previewContent" class="preview-panel muted">No preview yet — generate a note to see it here.</div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h3>Saved Notes (browser)</h3>
+        <div id="savedList" class="muted">No saved notes</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/*
+  Final single-file app. Browser-based OpenAI calls.
+  WARNING: Do not share your OpenAI API key. For production use a server-side proxy.
+*/
+document.addEventListener('DOMContentLoaded', () => {
+  const $ = id => document.getElementById(id);
+
+  // elements
+  const apiKeyInput = $('apiKey'), rememberKey = $('rememberKey'), removeKeyBtn = $('removeKey');
+  const generateBtn = $('generateBtn'), clearBtn = $('clearBtn'), statusEl = $('status');
+  const subjectEl = $('subject'), classEl = $('classLevel'), termEl = $('term'), weekEl = $('week');
+  const lessonStyleEl = $('lessonStyle'), topicEl = $('topic'), subtopicsEl = $('subtopics');
+  const optObjectives = $('optObjectives'), optMaterials = $('optMaterials'), optAssessment = $('optAssessment'), optSummary = $('optSummary');
+  const noteArea = $('noteArea'), renderPreviewBtn = $('renderPreview');
+  const previewCard = $('previewCard'), previewTitle = $('previewTitle'), previewContent = $('previewContent');
+  const loadingWrap = $('loading'), loadingText = $('loadingText');
+  const downloadPdfBtn = $('downloadPdf'), printViewBtn = $('printView');
+  const saveLocalBtn = $('saveLocal'), loadLocalBtn = $('loadLocal'), exportJsonBtn = $('exportJson'), importJsonBtn = $('importJson'), importJsonFile = $('importJsonFile'), clearLocalBtn = $('clearLocal');
+  const savedList = $('savedList');
+  const insertTeacherComment = $('insertTeacherComment'), insertPrincipalComment = $('insertPrincipalComment');
+  const themeToggle = $('themeToggle');
+
+  const STORAGE_KEY = 'ln_nigeria_ai_final_v1';
+  const KEY_STORE = 'openai_ln_key_final_v1';
+
+  // theme
+  function setTheme(t){ document.body.setAttribute('data-theme', t); localStorage.setItem('ln_theme', t); themeToggle.textContent = t === 'dark' ? '☀️ Light' : '🌙 Dark'; }
+  themeToggle.addEventListener('click', ()=> { const cur = document.body.getAttribute('data-theme') || 'light'; setTheme(cur === 'light' ? 'dark' : 'light'); });
+  (function(){ setTheme(localStorage.getItem('ln_theme') || 'light'); })();
+
+  // restore saved key
+  (function(){ try{ const k = localStorage.getItem(KEY_STORE); if(k){ apiKeyInput.value = k; rememberKey.checked = true; } }catch(e){} })();
+
+  function setStatus(txt='', isError=false){ statusEl.textContent = txt; statusEl.style.color = isError ? 'crimson' : ''; }
+
+  // spinner control
+  function showLoading(msg='Generating Lesson Note...'){ loadingWrap.style.display = 'inline-flex'; loadingText.textContent = msg; }
+  function hideLoading(){ loadingWrap.style.display = 'none'; }
+
+  // prompt
+  function buildSystemPrompt(){
+    return `You are an experienced Nigerian teacher and curriculum writer familiar with UBE and WAEC-style lesson notes. Produce a clear, structured lesson note suitable for classroom use. Output must be plain text (no HTML) and must contain the exact section headings (each on its own line):
+Title
+Subject
+Class/Level
+Term
+Week
+Topic
+Subtopics
+Objectives
+Instructional Materials
+Lesson Development / Main Content (include Step I - Step III where appropriate)
+Evaluation / Assessment
+Conclusion
+Teacher's Note / Summary
+Extension / Homework
+
+In Lesson Development include numbered subsections matching each provided subtopic. Use language appropriate for Nigerian classrooms; be concise but complete.`;
+  }
+
+  function buildUserPrompt(inputs){
+    return `Please generate a Nigerian-style lesson note.
+
+Subject: ${inputs.subject}
+Class/Level: ${inputs.classLevel}
+Term: ${inputs.term}
+Week: ${inputs.week}
+Topic: ${inputs.topic}
+Subtopics: ${inputs.subtopics.length ? inputs.subtopics.join(' | ') : '(none)'}
+Lesson Style: ${inputs.style}
+IncludeObjectives: ${inputs.options.includeObjectives ? 'yes' : 'no'}
+IncludeMaterials: ${inputs.options.includeMaterials ? 'yes' : 'no'}
+IncludeAssessment: ${inputs.options.includeAssessment ? 'yes' : 'no'}
+IncludeSummary: ${inputs.options.includeSummary ? 'yes' : 'no'}
+
+Produce the note using the section headings exactly as specified in the system prompt.`;
+  }
+
+  // OpenAI call
+  async function callOpenAI(apiKey, messages, model='gpt-3.5-turbo'){
+    const url = 'https://api.openai.com/v1/chat/completions';
+    const body = { model, messages, temperature: 0.2, max_tokens: 1400 };
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json', 'Authorization':'Bearer ' + apiKey },
+      body: JSON.stringify(body)
+    });
+    if(!resp.ok){
+      const txt = await resp.text();
+      throw new Error(`OpenAI API error ${resp.status}: ${txt}`);
+    }
+    const json = await resp.json();
+    return (json.choices && json.choices[0] && json.choices[0].message && json.choices[0].message.content)
+      ? json.choices[0].message.content
+      : (json.choices && json.choices[0] && json.choices[0].text ? json.choices[0].text : '');
+  }
+
+  function renderPreviewFromText(txt){
+    if(!txt){ previewCard.style.display = 'block'; previewTitle.textContent='Lesson Note Preview'; previewContent.innerHTML = '<div class="muted">No preview yet — generate a note to see it here.</div>'; return; }
+    previewCard.style.display = 'block';
+    previewTitle.textContent = topicEl.value.trim() || 'Lesson Note';
+    previewContent.innerHTML = '';
+    const blocks = txt.split(/\n\s*\n/);
+    blocks.forEach(block => {
+      const lines = block.split('\n').filter(Boolean);
+      if(!lines.length) return;
+      const heading = lines[0].replace(/:$/,'').trim();
+      const known = /^(Title|Subject|Class\/Level|Term|Week|Topic|Subtopics|Objectives|Instructional Materials|Lesson Development|Main Content|Evaluation|Assessment|Conclusion|Teacher's Note|Extension|Homework)/i;
+      if(known.test(heading) || heading.endsWith(':')){
+        const h = document.createElement('h3'); h.style.margin='8px 0 6px 0'; h.textContent = heading;
+        previewContent.appendChild(h);
+        lines.slice(1).forEach(l => { const p = document.createElement('p'); p.style.margin='6px 0'; p.textContent = l; previewContent.appendChild(p); });
+      } else {
+        lines.forEach(l => { const p = document.createElement('p'); p.style.margin='6px 0'; p.textContent = l; previewContent.appendChild(p); });
+      }
+    });
+  }
+
+  // Generate
+  generateBtn.addEventListener('click', async () => {
+    try {
+      const apiKey = apiKeyInput.value.trim();
+      if(!apiKey) return alert('Please paste your OpenAI API key.');
+      if(rememberKey.checked){ try{ localStorage.setItem(KEY_STORE, apiKey); }catch(e){} } else { try{ localStorage.removeItem(KEY_STORE); }catch(e){} }
+
+      const subject = subjectEl.value;
+      const classLevel = classEl.value;
+      const term = termEl.value;
+      const week = weekEl.value || '';
+      const topic = topicEl.value.trim();
+      const subtopics = subtopicsEl.value.split(',').map(s=>s.trim()).filter(Boolean);
+      const style = lessonStyleEl.value;
+      const options = { includeObjectives: !!optObjectives.checked, includeMaterials: !!optMaterials.checked, includeAssessment: !!optAssessment.checked, includeSummary: !!optSummary.checked };
+
+      if(!topic) return alert('Please enter a Topic.');
+
+      showLoading();
+      setStatus('Generating — contacting OpenAI...');
+      generateBtn.disabled = true;
+
+      const system = buildSystemPrompt();
+      const user = buildUserPrompt({ subject, classLevel, term, week, topic, subtopics, style, options });
+      const messages = [{ role: 'system', content: system }, { role: 'user', content: user }];
+
+      const aiText = await callOpenAI(apiKey, messages, 'gpt-3.5-turbo');
+      noteArea.value = aiText;
+      renderPreviewFromText(aiText);
+      setStatus('Generated — edit if needed, then Save or Download.');
+    } catch (err) {
+      console.error(err);
+      setStatus('Error: ' + (err.message || err), true);
+      alert('Generation failed: ' + (err.message || err));
+    } finally {
+      hideLoading();
+      generateBtn.disabled = false;
+    }
+  });
+
+  // Remove saved key
+  removeKeyBtn.addEventListener('click', () => {
+    if(!confirm('Remove saved API key from this browser?')) return;
+    localStorage.removeItem(KEY_STORE);
+    apiKeyInput.value='';
+    rememberKey.checked=false;
+    setStatus('Saved API key removed.');
+  });
+
+  // Clear
+  clearBtn.addEventListener('click', () => {
+    topicEl.value=''; subtopicsEl.value=''; noteArea.value=''; renderPreviewFromText(''); setStatus('Cleared.');
+  });
+
+  // Render preview
+  renderPreviewBtn.addEventListener('click', ()=> renderPreviewFromText(noteArea.value));
+
+  // Printable view (opens new window with clean printable HTML)
+  printViewBtn.addEventListener('click', () => {
+    const text = noteArea.value.trim();
+    if(!text) return alert('No content to show. Generate a note first.');
+    const win = window.open('', '_blank', 'noopener');
+    const style = `
+      body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;padding:24px;color:#111}
+      h1{font-size:22px}
+      h3{margin-top:18px}
+      pre{white-space:pre-wrap;font-size:14px}
+    `;
+    const html = `
+      <html><head><title>Printable Lesson Note</title><style>${style}</style></head>
+      <body><h1>${escapeHtml(topicEl.value || 'Lesson Note')}</h1><pre>${escapeHtml(text)}</pre>
+      <script>window.onload=function(){window.print();}</script></body></html>`;
+    win.document.write(html); win.document.close();
+  });
+
+  // Download PDF (client-side)
+  downloadPdfBtn.addEventListener('click', () => {
+    const text = noteArea.value.trim();
+    if(!text) return alert('No content to export. Generate first.');
+    const wrapper = document.createElement('div');
+    wrapper.style.padding='20px'; wrapper.style.fontFamily='system-ui,Arial';
+    const title = document.createElement('h1'); title.textContent = topicEl.value || 'Lesson Note';
+    wrapper.appendChild(title);
+    const pre = document.createElement('pre'); pre.style.whiteSpace='pre-wrap'; pre.style.fontSize='14px'; pre.textContent = text;
+    wrapper.appendChild(pre);
+    const filename = (topicEl.value ? topicEl.value.replace(/\s+/g,'_') : 'lesson_note') + '.pdf';
+    html2pdf().set({ margin:0.4, filename }).from(wrapper).save();
+  });
+
+  // Save/load/export/import/clear saves
+  function renderSaves(){
+    const arr = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    if(!arr.length){ savedList.textContent='No saved notes'; return; }
+    savedList.innerHTML='';
+    arr.slice().reverse().forEach((it, i) => {
+      const idx = arr.length - 1 - i;
+      const div = document.createElement('div'); div.style.marginBottom='8px';
+      const title = it.meta && it.meta.topic ? it.meta.topic : 'Untitled';
+      div.innerHTML = `<strong>${escapeHtml(title)}</strong> <div class="muted">Saved: ${new Date(it.created).toLocaleString()}</div>
+        <div style="margin-top:6px"><button class="btn small" data-i="${idx}">Load</button> <button class="btn ghost small" data-i="${idx}">Delete</button></div>`;
+      const loadBtn = div.querySelectorAll('button')[0];
+      const delBtn = div.querySelectorAll('button')[1];
+      loadBtn.addEventListener('click', ()=> {
+        const data = arr[Number(loadBtn.dataset.i)];
+        if(!data) return alert('Failed to load');
+        subjectEl.value = data.meta.subject || subjectEl.value;
+        classEl.value = data.meta.classLevel || classEl.value;
+        termEl.value = data.meta.term || termEl.value;
+        weekEl.value = data.meta.week || weekEl.value;
+        lessonStyleEl.value = data.meta.style || lessonStyleEl.value;
+        topicEl.value = data.meta.topic || '';
+        subtopicsEl.value = (data.meta.subtopics || []).join(', ');
+        noteArea.value = data.note || '';
+        renderPreviewFromText(data.note || '');
+        setStatus('Loaded saved note.');
+      });
+      delBtn.addEventListener('click', ()=> {
+        if(!confirm('Delete saved note?')) return;
+        arr.splice(Number(delBtn.dataset.i),1);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+        renderSaves();
+      });
+      savedList.appendChild(div);
+    });
+  }
+  saveLocalBtn.addEventListener('click', ()=> {
+    const text = noteArea.value.trim(); if(!text) return alert('No note to save.');
+    const meta = {
+      subject: subjectEl.value,
+      classLevel: classEl.value,
+      term: termEl.value,
+      week: weekEl.value,
+      style: lessonStyleEl.value,
+      topic: topicEl.value,
+      subtopics: subtopicsEl.value.split(',').map(s=>s.trim()).filter(Boolean)
+    };
+    const arr = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); arr.push({ meta, note: text, created: new Date().toISOString() });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+    setStatus('Saved locally.'); renderSaves();
+  });
+  loadLocalBtn.addEventListener('click', ()=> {
+    const arr = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); if(!arr.length) return alert('No saved notes');
+    const data = arr[arr.length-1];
+    subjectEl.value = data.meta.subject || subjectEl.value;
+    classEl.value = data.meta.classLevel || classEl.value;
+    termEl.value = data.meta.term || termEl.value;
+    weekEl.value = data.meta.week || weekEl.value;
+    lessonStyleEl.value = data.meta.style || lessonStyleEl.value;
+    topicEl.value = data.meta.topic || '';
+    subtopicsEl.value = (data.meta.subtopics || []).join(', ');
+    noteArea.value = data.note || '';
+    renderPreviewFromText(data.note || '');
+    setStatus('Loaded most recent saved note.');
+  });
+  exportJsonBtn.addEventListener('click', ()=> {
+    const arr = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const blob = new Blob([JSON.stringify(arr,null,2)], { type:'application/json' });
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'lesson_notes_backup.json'; a.click(); a.remove();
+  });
+  importJsonBtn.addEventListener('click', ()=> importJsonFile.click());
+  importJsonFile.addEventListener('change', async (e)=> {
+    try {
+      const f = e.target.files[0]; if(!f) return;
+      const txt = await f.text(); const arr = JSON.parse(txt); if(!Array.isArray(arr)) throw new Error('Invalid backup format'); localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)); renderSaves(); setStatus('Imported backup.');
+    } catch(err){ alert('Import failed: ' + (err.message || err)); }
+  });
+  clearLocalBtn.addEventListener('click', ()=> { if(!confirm('Clear all saved notes?')) return; localStorage.removeItem(STORAGE_KEY); renderSaves(); setStatus('Cleared saved notes.'); });
+
+  // small auto comments insertions (teacher/principal) — naive templates
+  insertTeacherComment.addEventListener('click', ()=> {
+    const base = noteArea.value || '';
+    const comment = `Teacher's Comment: The student showed understanding during class activities; further reinforcement recommended for weaker areas.`;
+    noteArea.value = base + '\n\n' + comment;
+    renderPreviewFromText(noteArea.value);
+  });
+  insertPrincipalComment.addEventListener('click', ()=> {
+    const base = noteArea.value || '';
+    const comment = `Principal's Comment: Well prepared lesson note. Keep records updated and ensure continuous assessment is documented.`;
+    noteArea.value = base + '\n\n' + comment;
+    renderPreviewFromText(noteArea.value);
+  });
+
+  // helper
+  function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+  // init
+  renderSaves();
+  setStatus('');
+});
+</script>
+</body>
+</html>

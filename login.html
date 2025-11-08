@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/access/auth_css/login.css">
+    <link rel="stylesheet" href="css/access/auth_css/login-authenticate.css">
+    <link rel="shortcut icon" href="img/avatar.png" type="image/x-icon">
+    <title>Login Page</title>
+</head>
+<body>
+
+    <section id="load-anim">
+        <div id="div1"></div>
+        <div id="div2"></div>
+        <div id="div3"></div>
+        <div id="div4"></div>
+        <div id="div5"></div>
+    </section>
+    <div id="auth-user-id-load-cont">
+        <div class="bar-cont" id="bar-cont">
+            <div class="status-message" id="status">Checking...</div>
+            <div class="bar-loader">
+                <div class="bar"></div>
+            </div>
+            <div class="percentage-text" id="percentage">0%</div>
+        </div>
+        <a href="userworkspace.html">
+            <button id="hidden-btn">
+                Start
+            </button>
+        </a>
+        
+    </div>
+     <div id="auth-user-id-load-cont2">
+        <div class="bar-cont" id="bar-cont2">
+            <div class="status-message" id="status2">Checking...</div>
+            <div class="bar-loader">
+                <div class="bar"></div>
+            </div>
+            <div class="percentage-text" id="percentage2">0%</div>
+        </div>
+        
+        
+    </div>
+    <div id="overall-cont">
+        <div class="greet-cont blob">
+            <a href="index.html">
+                <button class="arrow" style="color: rgb(8, 40, 67); font-weight: bold;">back</button>
+            </a>
+                <h class="greet-cont-text">Welcome Back!</h1>
+        </div>
+    <div class="sign-up-container" id="cont">
+        <div class="sign-up-container-text"><span class="span1">Login</span>
+        <form id="form">
+            <div class="row">
+                <img src="img/avatar.png" width="50px">
+                <input type="text" placeholder="Enter your middle name only!" id="val1" required><br>
+            </div>
+            <div class="row">
+                <img src="img/emailicon.png" width="50px">
+                <input type="email" placeholder="Enter your Email" id="val2" required>  <br>  
+            </div> 
+            <div class="row">
+                <img src="img/padlock.png" width="50px">
+                <input type="password" placeholder="Enter your password" id="val3" required>  <br>  
+            </div> 
+            <div class="row">    
+                <div>&rightarrow;</div>                         
+                <button class="sub" type="submit">Login</button>
+            </div>
+            <p style="color: white; font-family: monospace; text-align: center;">
+                Are you a new user? <br>
+                Click <a href="signup.html">here</a> to sign up
+            </p>
+        </form>
+           
+    </div>
+    </div>
+    <script src="js/authenticate_js/login.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>

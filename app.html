@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kampo-app</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/app.css">
+    <!-- html2pdf for PDF export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+</head>
+<body data-theme="light">
+    <div class="loadAnim" id="loadAnim">
+        <div class="circle"><!-- loader --></div>
+    </div>
+    <div id="page-cont">
+    
+<div class="app" id="appRoot">
+  <aside class="sidebar" id="sidebar">
+    <div>
+      <div class="brand">Dashboard</div>
+      <nav class="nav" role="navigation" aria-label="Main navigation">
+          <a href="userworkspace.html">
+          <button class="nav-btn">Workspace</button>
+          </a>
+        <button class="nav-btn active" data-target="panel-dashboard">Home</button>
+        <button class="nav-btn" data-target="panel-generator">Generator</button>
+        <button class="nav-btn" data-target="panel-grading">Grading Guide</button>
+        <button class="nav-btn" data-target="panel-settings">Settings</button>
+      </nav>
+    </div>
+    
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:15px;">
+        <button id="hamburger" class="btn small" style="display:none;margin-right:15px;">☰</button>
+        <div style="font-weight:600;font-size:30px;color:#505fa0;">Kampo</div>
+      </div>
+
+      <div class="actions">
+        <button id="themeToggle" class="btn ghost small">Dark</button>
+        <button id="saveLocal" class="btn">Save</button>
+        <button id="loadLocal" class="btn ghost small">Load</button>
+        <button id="exportJson" class="btn ghost small">Export</button>
+        <button id="importJsonBtn" class="btn ghost small">Import</button>
+        <input id="importJsonFile" type="file" accept="application/json" style="display:none"/>
+        <button id="downloadPdf" class="btn">Download PDF</button>
+      </div>
+    </div>
+
+    <section class="content">
+      <div id="panel-dashboard" class="panel active">
+        <h2>Dashboard</h2>
+        <p class="muted">Overview & quick navigation — tap a card to jump to a section.</p>
+        <div class="card-grid" style="margin-top:12px">
+          <div class="card" id="card-saved" style="cursor:pointer"><h3>Saved Reports</h3><p id="savedCount">0 saved</p><p class="muted">Use <span class="kbd">Save</span> to store reports locally.</p></div>
+          <div class="card" id="card-generator" style="cursor:pointer"><h3>Generator</h3><p>Create & export report cards.</p></div>
+          <div class="card" id="card-grading" style="cursor:pointer"><h3>Grading Guide</h3><p>Customize grade ranges & remarks.</p></div>
+          <div class="card" id="card-settings" style="cursor:pointer"><h3>Settings</h3><p>Backups & clear local data.</p></div>
+        </div>
+      </div>
+
+      <div id="panel-generator" class="panel">
+        <h2>Report Card Generator</h2>
+        <div class="controls" style="margin-top:12px">
+          <div class="field" style="flex:1"><label class="muted">Student Name</label><input id="studentName" placeholder="Full name"/></div>
+          <div class="field" style="width:160px"><label class="muted">Class</label><input id="studentClass" placeholder="e.g. JSS1A"/></div>
+          <div class="field" style="width:160px"><label class="muted">Term</label><select id="termSelect"><option>First Term</option><option>Second Term</option><option>Third Term</option></select></div>
+        </div>
+
+        <div class="subject-wrap" style="margin-top:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h3 style="margin:0">Subjects</h3>
+            <div class="row-actions">
+              <button id="addSubject" class="btn ghost">+ Add Subject</button>
+              <button id="calcBtn" class="btn">Calculate</button>
+            </div>
+          </div>
+
+          <table class="striped" id="subjectsTable" style="margin-top:12px">
+            <thead><tr><th style="text-align:left">Subject</th><th style="width:110px">Max</th><th style="width:110px">Obtained</th><th style="width:140px">Remark</th><th style="width:90px">Action</th></tr></thead>
+            <tbody id="subjectsTbody"></tbody>
+          </table>
+
+          <div class="report-preview" id="reportPreview">
+            <div class="report-header"><div class="meta"><h3 id="previewName">Student Name</h3><p id="previewMeta" class="muted">Class • Term</p></div></div>
+
+            <table class="striped" id="previewTable">
+              <thead><tr><th>Subject</th><th>Max</th><th>Obtained</th><th>%</th><th>Grade</th><th>Remark</th></tr></thead>
+              <tbody id="previewTbody"></tbody>
+            </table>
+
+            <div class="report-footer">
+              <div style="display:flex;gap:12px;flex-wrap:wrap">
+                <div><strong>Total:</strong> <span id="previewTotal">0</span></div>
+                <div><strong>Average:</strong> <span id="previewAvg">0</span></div>
+                <div><strong>Grade:</strong> <span id="previewGrade">-</span></div>
+                <div><strong>Remark:</strong> <span id="previewRemark">-</span></div>
+              </div>
+
+              <div style="margin-top:10px">
+                <p style="margin:6px 0"><strong>Teacher's Comment:</strong>
+                  <span id="previewTeacher" class="editable" contenteditable="true" data-user-edited="0">-</span>
+                </p>
+                <p style="margin:6px 0"><strong>Principal's Comment:</strong>
+                  <span id="previewPrincipal" class="editable" contenteditable="true" data-user-edited="0">-</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="panel-grading" class="panel">
+        <h2>Grading Guide</h2>
+        <p class="muted">Define min/max ranges, grade label and remark.</p>
+        <div style="margin-top:12px">
+          <button id="addGradeRow" class="btn ghost">+ Add Row</button>
+          <button id="resetGuide" class="btn">Reset Defaults</button>
+        </div>
+        <table class="striped" id="gradingTable" style="margin-top:12px">
+          <thead><tr><th>Min %</th><th>Max %</th><th>Grade</th><th>Remark</th><th>Action</th></tr></thead>
+          <tbody id="gradingTbody"></tbody>
+        </table>
+      </div>
+
+      <div id="panel-settings" class="panel">
+        <h2>Settings</h2>
+        <p class="muted">Export/import backups and clear local data.</p>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button id="exportJsonMain" class="btn ghost">Export Backup</button>
+          <button id="importJsonMainBtn" class="btn ghost">Import Backup</button>
+          <input id="importJsonMainFile" type="file" accept="application/json" style="display:none"/>
+          <button id="clearAll" class="btn ghost">Clear All Local Data</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+</div>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>
